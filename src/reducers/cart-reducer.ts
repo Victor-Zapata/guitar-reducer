@@ -13,14 +13,14 @@ export type CartState = {
     cart: CartItem[]
 }
 
-const lookStorage = (): CartItem[] => {
-    const cart = localStorage.getItem('cart')
-    return cart ? JSON.parse(cart) : []
+const initialCart = (): CartItem[] => {
+    const localStorageCart = localStorage.getItem('cart')
+    return localStorageCart ? JSON.parse(localStorageCart) : []
 }
 
 export const initialState: CartState = {
     data: db,
-    cart: lookStorage()
+    cart: initialCart()
 }
 
 export const cartReducer = (state: CartState = initialState, action: CartActions) => {
@@ -56,18 +56,41 @@ export const cartReducer = (state: CartState = initialState, action: CartActions
             }
 
         case 'decrease-quantity':
+            const updatedCartDecrese = state.cart.map(item => {
+                if (item.id === action.payload.id && item.quantity > 1) {
+                    return {
+                        ...item,
+                        quantity: item.quantity - 1
+                    }
+                } else {
+                    return item
+                }
+            })
             return {
-                ...state
+                ...state,
+                cart: updatedCartDecrese
             }
 
         case 'increase-quantity':
+            const updatedCartIncrese = state.cart.map(item => {
+                if (item.id === action.payload.id && item.quantity < 5) {
+                    return {
+                        ...item,
+                        quantity: item.quantity + 1
+                    }
+                } else {
+                    return item
+                }
+            })
             return {
-                ...state
+                ...state,
+                cart: updatedCartIncrese
             }
 
         case 'clear-cart':
             return {
-                ...state
+                ...state,
+                cart: []
             }
 
         default:
