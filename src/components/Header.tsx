@@ -7,11 +7,7 @@ type HeaderProps = {
     cart: CartItem[]
 }
 
-export default function Header({
-    dispatch,
-    cart,
-}: HeaderProps) {
-
+export default function Header({ dispatch, cart }: HeaderProps) {
 
     // State Derivado
     const isEmpty = useMemo(() => cart.length === 0, [cart])
